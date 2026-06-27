@@ -10,6 +10,13 @@ Safe OCR pipeline for healthcare images with PII masking, NHS number validation,
 pip install health-safe-ocr
 ```
 
+For a Python-only OCR backend that does not require installing the Tesseract
+desktop app:
+
+```bash
+pip install "health-safe-ocr[easyocr]"
+```
+
 For local development:
 
 ```bash
@@ -26,9 +33,25 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-## Tesseract OCR Requirement
+## OCR Engines
 
-This package uses `pytesseract`, which requires the Tesseract OCR system binary to be installed separately.
+By default, `health-safe-ocr` uses `engine="auto"`:
+
+1. Use Tesseract when the `tesseract` system command is installed.
+2. Fall back to EasyOCR when installed with `health-safe-ocr[easyocr]`.
+3. Show clear setup instructions when no OCR engine is available.
+
+Check your local setup:
+
+```bash
+health-safe-ocr doctor
+```
+
+If Tesseract is installed but not on `PATH`, set `TESSERACT_CMD` to the full executable path. On Windows, the package also tries the common install location automatically:
+
+```powershell
+$env:TESSERACT_CMD = "C:\Program Files\Tesseract-OCR\tesseract.exe"
+```
 
 Windows:
 
@@ -48,12 +71,21 @@ Linux:
 sudo apt install tesseract-ocr
 ```
 
+Or install the optional EasyOCR backend instead:
+
+```bash
+pip install "health-safe-ocr[easyocr]"
+```
+
+EasyOCR avoids the Tesseract desktop install, but it installs heavier Python
+dependencies and may download OCR model files on first use.
+
 ## Python Usage
 
 ```python
 from health_safe_ocr import HealthSafeOCR
 
-ocr = HealthSafeOCR()
+ocr = HealthSafeOCR(engine="auto")
 result = ocr.extract(
     "patient_letter.jpg",
     mask_sensitive=True,
@@ -99,6 +131,13 @@ Return JSON:
 health-safe-ocr patient_letter.jpg --mask-pii --json
 ```
 
+Force a backend:
+
+```bash
+health-safe-ocr patient_letter.jpg --engine tesseract --mask-pii --json
+health-safe-ocr patient_letter.jpg --engine easyocr --mask-pii --json
+```
+
 Example JSON output:
 
 ```json
@@ -114,7 +153,7 @@ Example JSON output:
 
 ## Supported PII Masking
 
-Version 0.1.0 supports regex-based masking for:
+Version 0.2.0 supports regex-based masking for:
 
 - Email addresses
 - UK phone numbers
@@ -142,6 +181,12 @@ Run the CLI locally:
 
 ```bash
 health-safe-ocr examples/sample.jpg --mask-pii --json
+```
+
+Check OCR dependencies:
+
+```bash
+health-safe-ocr doctor
 ```
 
 Build package distributions:
@@ -175,23 +220,29 @@ python -m twine upload dist/*
 
 ### 0.2.0
 
+- Automatic OCR engine selection
+- Optional EasyOCR backend
+- Clearer OCR dependency diagnostics
+
+### 0.3.0
+
 - PDF support
 - Scanned PDF page extraction
 - Better image preprocessing
 
-### 0.3.0
+### 0.4.0
 
 - PaddleOCR engine option
 - Better OCR accuracy
 - Multilingual support
 
-### 0.4.0
+### 0.5.0
 
 - Microsoft Presidio integration
 - Advanced entity detection
 - Name and address masking
 
-### 0.5.0
+### 0.6.0
 
 - Azure Document Intelligence provider
 - Cloud OCR fallback
@@ -208,4 +259,3 @@ python -m twine upload dist/*
 ## License
 
 MIT
-

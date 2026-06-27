@@ -1,5 +1,4 @@
-from .extractor import HealthSafeOCR
+from .extractor import HealthSafeOCR, OcrEngineUnavailableError
 from .models import OcrResult
 
-__all__ = ["HealthSafeOCR", "OcrResult"]
-
+__all__ = ["HealthSafeOCR", "OcrEngineUnavailableError", "OcrResult"]

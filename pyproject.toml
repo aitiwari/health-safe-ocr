@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "health-safe-ocr"
-version = "0.1.0"
+version = "0.2.0"
 description = "Safe OCR pipeline for healthcare images with PII masking and NHS number validation."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -30,6 +30,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+easyocr = [
+  "easyocr>=1.7.0"
+]
 dev = [
   "pytest>=8.0.0",
   "ruff>=0.5.0",
