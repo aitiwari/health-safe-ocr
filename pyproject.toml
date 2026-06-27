@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "health-safe-ocr"
+version = "0.1.0"
+description = "Safe OCR pipeline for healthcare images with PII masking and NHS number validation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Sachin Tiwari" }
+]
+keywords = ["ocr", "healthcare", "nhs", "pii", "tesseract", "rag", "llm"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Scientific/Engineering :: Image Recognition",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent"
+]
+dependencies = [
+  "pillow>=10.0.0",
+  "pytesseract>=0.3.10"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.5.0",
+  "mypy>=1.10.0",
+  "build>=1.2.0",
+  "twine>=5.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/aitiwari/health-safe-ocr"
+Repository = "https://github.com/aitiwari/health-safe-ocr"
+Issues = "https://github.com/aitiwari/health-safe-ocr/issues"
+
+[project.scripts]
+health-safe-ocr = "health_safe_ocr.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[[tool.mypy.overrides]]
+module = ["pytesseract"]
+ignore_missing_imports = true
